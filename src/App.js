@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import Clarifai from 'clarifai'
 import Particles from 'react-particles-js';
 import Navigation from './components/Navigation/Navigation.js';
 import Logo from './components/Logo/Logo.js';
@@ -10,9 +9,6 @@ import FaceRecognation from './components/FaceRecognation/FaceRecognation.js';
 import SignIn from './components/SignIn/SignIn.js'
 import Register from './components/Register/Register.js'
 
-const app = new Clarifai.App({
-  apiKey: '5ced6265d9464f799fc78f4e60a224b5'
- });
 
 
 const particlesOptions = {
@@ -97,7 +93,15 @@ class App extends React.Component {
 
   onSubmit = () => {
     this.setState({imageUrl: this.state.input})
-      app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
+       fetch("http://localhost:300/imageurl", {
+        method: 'post',
+        headers: {'Content-Type' : 'application/json'},
+        body: JSON.stringify({
+            input: this.state.input
+            
+        })
+    })
+    .then(response => response.json())
       .then( response => 
         {  if(response){
           fetch("http://localhost:300/image", {
@@ -116,9 +120,7 @@ class App extends React.Component {
         }         
           this.displayFaceBox(this.calculateFaceLocation(response))
       })
-      .catch(error => console.log(error));
-  
-  
+      .catch(error => console.log(error)); 
     }
   render(){
     const {isSignedIn, imageUrl, route, box} = this.state;
