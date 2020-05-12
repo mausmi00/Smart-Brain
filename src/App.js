@@ -112,6 +112,7 @@ class App extends React.Component {
               .then(count => {
                 this.setState(Object.assign(this.state.user,{entries: count}))
               })
+              .catch(console.log)
         }         
           this.displayFaceBox(this.calculateFaceLocation(response))
       })
@@ -138,13 +139,9 @@ class App extends React.Component {
        this.state.route === 'signin'
        ? <SignIn loadUser={this.loadUser}  onRouteChange = {this.onRouteChange} />
         : <Register loadUser={this.loadUser} onRouteChange = {this.onRouteChange}/>
-
-
-     )
-      
+     )     
       }
-      
-    </div>
+   </div>
   );
     }
   }
